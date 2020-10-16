@@ -1,0 +1,17 @@
+{
+  "name": "corona-scrape",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "got": "^11.7.0",
+    "jsdom": "^16.4.0",
+    "moment": "^2.29.1",
+    "pdf2json": "^1.2.0"
+  }
+}
