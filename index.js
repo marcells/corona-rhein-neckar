@@ -38,7 +38,15 @@ const loadData = async () => {
 }
 
 const generateStats = resolvedRows => {
-    const interests = [{ city: 'Ilvesheim', numberOfHabitants: 9350 }];
+    const interests = [
+        { city: 'Ilvesheim', numberOfHabitants: 9350 },
+        { city: 'Ladenburg', numberOfHabitants: 11661 },
+        { city: 'Heddesheim', numberOfHabitants: 11808 },
+        { city: 'Nußloch', numberOfHabitants: 11295 },
+        { city: 'Leimen', numberOfHabitants: 27044 },
+        { city: 'Brühl', numberOfHabitants: 14321 },
+        { city: 'Walldorf', numberOfHabitants: 15760 },
+    ];
 
     const getNumberOfIncreasedInfections = city => {
         const oldest = resolvedRows[0].additionalData.filter(data => data.city === city)[0];
