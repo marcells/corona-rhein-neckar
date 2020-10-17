@@ -49,16 +49,23 @@ const generateStats = resolvedRows => {
     ];
 
     const getNumberOfIncreasedInfections = city => {
-        const oldest = resolvedRows[0].additionalData.filter(data => data.city === city)[0];
-        const newest = resolvedRows[resolvedRows.length - 1].additionalData.filter(data => data.city === city)[0];
+        const first = resolvedRows[0];
+        const last = resolvedRows[resolvedRows.length - 1];
 
-        return newest.totalInfections - oldest.totalInfections;
+        const oldest = first.additionalData.filter(data => data.city === city)[0];
+        const newest = last.additionalData.filter(data => data.city === city)[0];
+
+        return {
+            from: first.date,
+            to: last.date,
+            increasedInfections: newest.totalInfections - oldest.totalInfections
+        };
     }
 
     const stats = interests
         .map(interest => ({
             interest: interest,
-            increasedInfections: getNumberOfIncreasedInfections(interest.city)
+            ...getNumberOfIncreasedInfections(interest.city)
         }))
         .map(data => ({
             ...data,
