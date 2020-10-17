@@ -29,10 +29,17 @@ const loadData = async () => {
     
     const resolvedRows = await Promise.all(rows);
 
-    // resolvedRows.forEach(x => {
-    //     console.log(`${x.additionalData.length} | ${x.date} | ${x.size} | ${x.url}`)
-    // });
+    console.log('Parsed documents:');
+    console.log('-----------------');
+    resolvedRows.forEach(x => {
+        console.log(`${x.additionalData.length} | ${x.date} | ${x.size} | ${x.url}`)
+    });
 
+    console.log();
+    console.log();
+
+    console.log('Statistics:')
+    console.log('-----------');
     const stats = generateStats(resolvedRows);
     console.table(stats);
 }
@@ -105,9 +112,12 @@ const generateStats = resolvedRows => {
         const newest = last.additionalData.filter(data => data.city === city)[0];
 
         return {
-            from: first.date,
-            to: last.date,
-            increasedInfections: newest.totalInfections - oldest.totalInfections
+            range: {
+                from: first.date,
+                to: last.date
+            },
+            increasedInfectionsForSevenDays: newest.totalInfections - oldest.totalInfections,
+            totalInfections: newest.totalInfections
         };
     }
 
@@ -118,17 +128,18 @@ const generateStats = resolvedRows => {
         }))
         .map(data => ({
             ...data,
-            sevenDayPer100000: data.increasedInfections / data.interest.numberOfHabitants * 100000
+            sevenDayPer100000: data.increasedInfectionsForSevenDays / data.interest.numberOfHabitants * 100000
         }));
     
     return stats;
 }
 
 const hasChildren = node => node.children.length > 0;
-const onlyLastSevenDays = data => {
-    const sevenDaysAgo = moment().subtract(7, 'days');
+const onlyLastSevenDays = (row, _, rows) => {
+    const maxDate = moment.max(rows.map(x => x.date));
+    const sevenDaysAgo = moment(maxDate).subtract(7, 'days');
 
-    return moment(data.date).isSameOrAfter(sevenDaysAgo);
+    return moment(row.date).isAfter(sevenDaysAgo);
 };
 
 const getDate = node => moment(node.children[1].children[0].innerHTML.split(' ')[0], "YYMMDD");
