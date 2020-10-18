@@ -6,23 +6,23 @@ const port = 3000
 
 app.use(express.static('public'));
 
-app.get('/api', async (req, res) => {
+app.get('/api', async (_, res) => {
     const data = await loadData();
     res.send(data);
 });
 
 app.listen(port, () => {
-    console.log(`Example app listening at http://localhost:${port}`)
+    console.log(`Corona-Scraper listening at http://localhost:${port}`)
 });
 
+// // Enable this for debug output on console
+// (async function() {
+//     const { stats, availableData } = await loadData();
 
-(async function() {
-    const { stats, availableData } = await loadData();
+//     availableData.forEach(x => {
+//         console.log(`${x.additionalData.length} | ${x.date} | ${x.size}`)
+//     });
 
-    availableData.forEach(x => {
-        console.log(`${x.additionalData.length} | ${x.date} | ${x.size}`)
-    });
-
-    console.log(stats.range);
-    console.table(stats.infectionsPerCity);
-})();
+//     console.log(stats.range);
+//     console.table(stats.infectionsPerCity);
+// })();

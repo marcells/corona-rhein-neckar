@@ -1,8 +1,6 @@
 (async function() {
     const response = await fetch('/api');
     const data = await response.json();
-
-    console.log(data);
     
     const cities = data.stats.infectionsPerCity.map(x => x.interest.city);
     const sevenDayPer100000 = data.stats.infectionsPerCity.map(x => x.sevenDayPer100000);
