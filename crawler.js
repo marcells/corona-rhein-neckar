@@ -50,7 +50,8 @@ const generateStats = resolvedRows => {
 
         return {
             increasedInfectionsForSevenDays: newest.totalInfections - oldest.totalInfections,
-            totalInfections: newest.totalInfections
+            totalInfections: newest.totalInfections,
+            currentInfections: newest.currentInfections,
         };
     }
 
