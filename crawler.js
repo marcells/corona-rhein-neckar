@@ -10,9 +10,13 @@ const url = `${baseUri}/start/landratsamt/coronavirus+fallzahlen.html`;
 
 const crawlData = async () => {
     const availableData = await getOrSave(new Date(), async () => {
+        console.log(`Loading ${url}...`);
+
         const response = await got(url);
         const dom = new JSDOM(response.body, { includeNodeLocations: true });
         const dates = [...dom.window.document.getElementsByClassName('dlDate')]
+
+        console.log(`Loading pdfs and parsing data `);
 
         const crawledAvailableData = dates
             .filter(hasChildren)
@@ -27,7 +31,13 @@ const crawlData = async () => {
                 additionalData: await loadPdf(x.url)
             }));
     
-        return await Promise.all(crawledAvailableData);
+        const crawledData = await Promise.all(crawledAvailableData);
+
+        console.log();
+        console.log('Finished loading.')
+        console.log();
+
+        return crawledData;
     });
 
     const stats = generateStats(availableData);
@@ -91,7 +101,9 @@ const loadPdf = url => {
     const promise = new Promise((resolve, reject) => {
         const pdfParser = new PDFParser();
         const pdfPipe = got.stream(url).pipe(pdfParser);
-    
+
+        process.stdout.write('.');
+
         pdfPipe.on("pdfParser_dataError", err => reject(err));
         pdfPipe.on("pdfParser_dataReady", pdf => {
             // console.log(`Loading url: ${url}`);
@@ -113,6 +125,7 @@ const loadPdf = url => {
     
             // console.log(textsForPages);
             // console.log();
+            process.stdout.write('.');
 
             resolve(textsForPages);
         });

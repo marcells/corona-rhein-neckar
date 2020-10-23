@@ -12,6 +12,8 @@ export const getOrSave = async (date, action) => {
     createDirectoryIfNotExists(cacheDirectory);
 
     if (fs.existsSync(fileName)) {
+        console.log(`Read from cache ${fileName}`);
+
         const cachedData = await fs.promises.readFile(fileName);
 
         return JSON.parse(cachedData);
@@ -20,6 +22,7 @@ export const getOrSave = async (date, action) => {
 
         await fs.promises.writeFile(fileName, JSON.stringify(data));
 
+        console.log(`Saved in cache ${fileName}`);
         return data;
     }
 }
