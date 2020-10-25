@@ -1,4 +1,4 @@
-(async function() {
+registerChart('chart2', async chartLink => {
   const response = await fetch('/api');
   const data = await response.json();
 
@@ -27,7 +27,7 @@
         height: 800,
     },
     title: {
-        text: 'Verlauf Infektionen'
+        text: chartLink.chartName
     },
     subtitle: {
         text: 'Quelle: rhein-neckar-kreis.de'
@@ -54,4 +54,4 @@
     },
     series: series
   });
-})();
+});

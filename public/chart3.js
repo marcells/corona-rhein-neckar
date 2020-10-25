@@ -1,4 +1,4 @@
-(async function() {
+registerChart('chart3', async chartLink => {
   const response = await fetch('/api');
   const data = await response.json();
 
@@ -6,7 +6,7 @@
     name: x.interest.city,
     x: x.sevenDayPer100000,
     y: x.totalInfections,
-    z: x.interest.numberOfHabitants / x.interest.squareKilometers,
+    z: x.interest.squareKilometers,
     numberOfHabitants: x.interest.numberOfHabitants,
     squareKilometers: x.interest.squareKilometers
   }));
@@ -22,7 +22,7 @@
         enabled: false
     },
     title: {
-        text: 'Verhältnis Infektionen zu Bevölkerungsdichte'
+        text: chartLink.chartName
     },
     subtitle: {
         text: 'Quelle: rhein-neckar-kreis.de'
@@ -67,4 +67,4 @@
     },
     series: [{ data: stats }]
   });
-})();
+});
