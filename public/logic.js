@@ -1,7 +1,7 @@
 const chartLinks = [
   { chartName: '7-Tages-Inzidenz, Gesamte Infektionen, Aktuell Infizierte', containerId: 'chart1' }, 
   { chartName: 'Verlauf Infektionen', containerId: 'chart2' },
-  { chartName: 'Verhältnis Infektionen zu Fläche', containerId: 'chart3' }
+  { chartName: 'Verhältnis Infektionen zu Bevölkerungsdichte', containerId: 'chart3' }
 ];
 
 const buildChartsMenu = () => {
