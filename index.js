@@ -16,15 +16,3 @@ app.listen(port, () => {
     console.log();
     console.log(`Open your browser on http://localhost:${port} to see the current statistics.`)
 });
-
-// // Enable this for debug output on console
-// (async function() {
-//     const { stats, availableData } = await loadData();
-
-//     availableData.forEach(x => {
-//         console.log(`${x.additionalData.length} | ${x.date} | ${x.size}`)
-//     });
-
-//     console.log(stats.range);
-//     console.table(stats.infectionsPerCity);
-// })();
