@@ -27,6 +27,7 @@ body {
 .repo {
     padding-left: 5px;
     align-self: center;
+    padding-right: 10px;
 }
 
 .repo:visited {
