@@ -2,7 +2,7 @@ registerChart('chart1', async chartLink => {
   const response = await fetch('/api');
   const data = await response.json();
 
-  const cities = data.stats.infectionsPerCity.map(x => `${x.interest.city} (${x.interest.numberOfHabitants})`);
+  const cities = data.stats.infectionsPerCity.map(x => x.interest);
   const sevenDayPer100000 = data.stats.infectionsPerCity.map(x => x.sevenDayPer100000);
   const totalInfections = data.stats.infectionsPerCity.map(x => x.totalInfections);
   const currentInfections = data.stats.infectionsPerCity.map(x => x.currentInfections);
@@ -20,18 +20,23 @@ registerChart('chart1', async chartLink => {
       },
       xAxis: {
           categories: cities,
-          crosshair: true
+          crosshair: true,
+          labels: {
+              format: '{value.city}'
+          }
       },
       yAxis: {
           min: 0,
           title: {
-          text: 'Wert'
+            text: 'Wert'
           }
       },
       tooltip: {
-          headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-          pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-          '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+          headerFormat: '<h3>{point.key.city}</h3><table>' + 
+                        '<tr><td>Einwohner</td><td>{point.key.numberOfHabitants} Einwohner</td></tr>' + 
+                        '<tr><td>Fläche:</td><td>{point.key.squareKilometers:.1f} km²</td></tr>',
+          pointFormat: '<tr><td style="color:{series.color};padding:0"><b>{series.name}: </b></td>' +
+                        '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
           footerFormat: '</table>',
           shared: true,
           useHTML: true
