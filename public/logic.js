@@ -4,6 +4,15 @@ const chartLinks = [
   { chartName: 'Verhältnis Infektionen zu Bevölkerungsdichte', containerId: 'chart3' }
 ];
 
+const charts = {};
+
+const registerChart = (containerId, onLoad) => {
+  charts[containerId] = {
+    onLoad,
+    isLoaded: false
+  };
+};
+
 const buildChartsMenu = () => {
   const chartsContainer = document.querySelector('figure.highcharts-figure');
   const chartLinksElement = document.getElementById('chartLinks');
@@ -28,12 +37,23 @@ const buildChartsMenu = () => {
 
   const hideAllCharts = () => chartLinks.forEach(chartLink => document.getElementById(chartLink.containerId).style.display = 'none');
 
-  const activateChart = chartLink => {
+  const activateChart = async chartLink => {
     hideAllCharts();
-    document.getElementById(chartLink.containerId).style.display = 'block'
+
+    const chartRegistration = charts[chartLink.containerId];
+
+    document.getElementById(chartLink.containerId).style.display = 'block';
+
+    if (chartRegistration.isLoaded === false) {
+      document.getElementById('chartIsLoading').style.display = 'block';
+      await chartRegistration.onLoad(chartLink);
+      document.getElementById('chartIsLoading').style.display = 'none';
+      chartRegistration.isLoaded = true;
+    }
   };
 
   hideAllCharts();
+  activateChart(chartLinks[0]);
 };
 
 (async function() {
