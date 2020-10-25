@@ -2,8 +2,13 @@
 
 Small scraper, which displays some COVID-19 statistics of the Rhein-Neckar-Kreis, Germany.
 
+To take a look at the statistics, please visit: http://corona.mspi.es
 
-## Install and run
+## Contributing
+
+PRs are welcome. Feel free to add new charts or improve the scraping logic or whatever you want to.
+
+### Install and run
 
 1. Install the dependencies and run it
 
