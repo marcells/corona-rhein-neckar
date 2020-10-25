@@ -37,11 +37,11 @@ const buildChartsMenu = () => {
 
     if (chartRegistration.isLoaded === false) {
       const loadingMessage = document.getElementById('loadingMessage');
-      loadingMessage.innerHTML = 'Chart is loading...';
+      loadingMessage.innerHTML = 'Chart wird geladen...';
 
       document.getElementById('chartIsLoading').style.display = 'block';
       
-      const timeout = setTimeout(() => loadingMessage.innerHTML = 'Chart is still loading. Fetching data the first time could take a few seconds longer. We are almost there...', 3000);
+      const timeout = setTimeout(() => loadingMessage.innerHTML = 'Das Chart lädt immer noch. Wenn die Daten das erste Mal abgerufen werden kann es etwas länger dauern. Wir haben es fast geschafft...', 3000);
 
       await chartRegistration.onLoad(chartLink);
       document.getElementById('chartIsLoading').style.display = 'none';
