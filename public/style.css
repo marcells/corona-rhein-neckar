@@ -4,7 +4,15 @@ body {
 
 .header {
     display: grid;
-    grid-template-columns: 1fr auto auto;
+    grid-template-columns: auto 1fr auto auto;
+    background-color: #ddd;
+}
+
+.logo {
+    height: 40px;
+    padding-right: 10px;
+    padding-left: 10px;
+    align-self: center;
 }
 
 .title {
