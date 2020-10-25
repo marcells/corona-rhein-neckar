@@ -13,6 +13,8 @@ app.get('/api', async (_, res) => {
 
 app.listen(port, () => {
     console.log(`Corona-Scraper listening at http://localhost:${port}`)
+    console.log();
+    console.log(`Open your browser on http://localhost:${port} to see the current statistics.`)
 });
 
 // // Enable this for debug output on console
