@@ -36,10 +36,17 @@ const buildChartsMenu = () => {
     document.getElementById(chartLink.containerId).style.display = 'block';
 
     if (chartRegistration.isLoaded === false) {
+      const loadingMessage = document.getElementById('loadingMessage');
+      loadingMessage.innerHTML = 'Chart is loading...';
+
       document.getElementById('chartIsLoading').style.display = 'block';
+      
+      const timeout = setTimeout(() => loadingMessage.innerHTML = 'Chart is still loading. Fetching data the first time could take a few seconds longer. We are almost there...', 3000);
+
       await chartRegistration.onLoad(chartLink);
       document.getElementById('chartIsLoading').style.display = 'none';
       chartRegistration.isLoaded = true;
+      clearTimeout(timeout);
     }
   };
 
