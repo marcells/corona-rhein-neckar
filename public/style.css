@@ -2,7 +2,31 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+.header {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+}
+
+.title {
+    align-self: center;
+}
+
+.gh-icon {
+    align-self: center;
+    height: 20px;
+}
+
+.repo {
+    padding-left: 5px;
+    align-self: center;
+}
+
+.repo:visited {
+    color:black;
+}
+
 .main ul {
+    clear: both;
     list-style-type: none;
     margin: 0;
     padding: 0;
