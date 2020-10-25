@@ -4,15 +4,6 @@ const chartLinks = [
   { chartName: 'Verhältnis Infektionen zu Bevölkerungsdichte', containerId: 'chart3' }
 ];
 
-const charts = {};
-
-const registerChart = (containerId, onLoad) => {
-  charts[containerId] = {
-    onLoad,
-    isLoaded: false
-  };
-};
-
 const buildChartsMenu = () => {
   const chartsContainer = document.querySelector('figure.highcharts-figure');
   const chartLinksElement = document.getElementById('chartLinks');
