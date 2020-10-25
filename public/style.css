@@ -2,7 +2,7 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-ul {
+.main ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
@@ -10,11 +10,11 @@ ul {
     background-color: #333333;
   }
   
-  li {
+.main li {
     float: left;
   }
   
-  li a {
+.main li a {
     display: block;
     color: white;
     text-align: center;
@@ -22,6 +22,6 @@ ul {
     text-decoration: none;
   }
   
-  li a:hover {
+.main li a:hover {
     background-color: #111111;
   }
