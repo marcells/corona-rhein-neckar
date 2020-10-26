@@ -2,7 +2,7 @@ const chartLinks = [
   { chartName: '7-Tages-Inzidenz, Gesamte Infektionen, Aktuell Infizierte', containerId: 'chart1' }, 
   { chartName: 'Verlauf Aktuelle Infektionen', containerId: 'chart2' },
   { chartName: 'Verhältnis Infektionen zu Bevölkerungsdichte', containerId: 'chart3' },
-  { chartName: 'Geographische Fallzahlen', containerId: 'chart4' },
+  { chartName: 'Geographische Fallzahlen (unvollständig)', containerId: 'chart4' },
 ];
 
 const buildChartsMenu = () => {
