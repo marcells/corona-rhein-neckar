@@ -6,8 +6,16 @@ import moment from 'moment';
 const currentDirectory = path.dirname(fileURLToPath(import.meta.url));
 const cacheDirectory = path.join(currentDirectory, '.crawlerCache');
 
+export const reset = async (date) => {
+    const fileName = getFileName(date);
+
+    if (fs.existsSync(fileName)) {
+        await fs.promises.unlink(fileName);
+    }
+}
+
 export const getOrSave = async (date, action) => {
-    const fileName = path.join(cacheDirectory, moment(date).format('YYYY_MM_DD'));
+    const fileName = getFileName(date);
     
     createDirectoryIfNotExists(cacheDirectory);
 
@@ -32,3 +40,5 @@ const createDirectoryIfNotExists = path => {
         fs.mkdirSync(path);
     }
 }
+
+const getFileName = date => path.join(cacheDirectory, moment(date).format('YYYY_MM_DD'));
