@@ -76,6 +76,7 @@ const generateStats = resolvedRows => {
         }));
     
     return {
+        latestDataAt: last.date,
         range: {
             from: first.date,
             to: last.date

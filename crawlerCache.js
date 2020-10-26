@@ -41,4 +41,4 @@ const createDirectoryIfNotExists = path => {
     }
 }
 
-const getFileName = date => path.join(cacheDirectory, moment(date).format('YYYY_MM_DD'));
+const getFileName = date => path.join(cacheDirectory, moment(date).format('YYYY_MM_DD_HH'));

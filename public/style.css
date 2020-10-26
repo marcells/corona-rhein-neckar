@@ -4,8 +4,11 @@ body {
 
 .header {
     display: grid;
-    grid-template-columns: auto 1fr auto auto;
+    grid-template-columns: auto 1fr auto;
+    grid-template-rows: auto auto;
     background-color: #ddd;
+    padding-top: 20px;
+    padding-bottom: 20px;
 }
 
 .logo {
@@ -17,21 +20,40 @@ body {
 
 .title {
     align-self: center;
-}
-
-.gh-icon {
-    align-self: center;
-    height: 20px;
+    font-size: 2em;
+    font-weight: bold;
 }
 
 .repo {
-    padding-left: 5px;
     align-self: center;
+    justify-self: end;
+}
+
+.repo img {
+    vertical-align: middle;
+    height: 20px;
+}
+
+.repo a {
+    vertical-align: middle;
+    padding-left: 5px;
     padding-right: 10px;
 }
 
-.repo:visited {
+.repo a:visited {
     color:black;
+}
+
+.lastUpdate {
+    grid-row: 2;
+    grid-column: 3;
+    margin-top: 10px;
+    margin-right: 10px;
+    font-size: 0.8em;
+    border-bottom-style: dashed;
+    border-bottom-width: 1px;
+    cursor: help;
+    justify-self: end;
 }
 
 .main ul {

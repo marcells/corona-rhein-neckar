@@ -54,6 +54,14 @@ const buildChartsMenu = () => {
   activateChart(chartLinks[0]);
 };
 
+const loadLatestDataAt = async () => {
+  const response = await fetch('/api');
+  const data = await response.json();
+
+  document.getElementById('latestDataAt').innerHTML = new Date(data.stats.latestDataAt).toLocaleDateString();
+};
+
 (async function() {
   buildChartsMenu();
+  await loadLatestDataAt();
 })();
