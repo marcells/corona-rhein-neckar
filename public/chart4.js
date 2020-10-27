@@ -12,12 +12,12 @@ registerChart('chart4', async chartLink => {
         numberOfHabitantsPerSquareKilometer: x.interest.numberOfHabitants / x.interest.squareKilometers,
         numberOfHabitants: x.interest.numberOfHabitants,
         squareKilometers: x.interest.squareKilometers
-    }));
+  }));
 
-    var states = [{
-        id: 'de-bw-08226000',
-        name: 'Rhein-Neckar-Kreis'
-    }];
+  const states = [{
+      id: 'de-bw-08226000',
+      name: 'Rhein-Neckar-Kreis'
+  }];
 
   Highcharts.mapChart('chart4', {
     chart: {
