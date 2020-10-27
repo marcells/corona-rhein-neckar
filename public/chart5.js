@@ -3,17 +3,17 @@ registerChart('chart5', async chartLink => {
    const data = await response.json();
 
    const stats = data.stats.infectionsPerCity.map(x => ({
-        name: x.interest.city,
-        ...x.interest.coords,
-        z: x.sevenDayPer100000,
-        sevenDayPer100000: x.sevenDayPer100000,
-        totalInfections: x.totalInfections,
-        currentInfections: x.currentInfections,
-        numberOfHabitantsPerSquareKilometer: x.interest.numberOfHabitants / x.interest.squareKilometers,
-        numberOfHabitants: x.interest.numberOfHabitants,
-        squareKilometers: x.interest.squareKilometers
-    }));
-
+      name: x.interest.city,
+      ...x.interest.coords,
+      z: x.sevenDayPer100000,
+      sevenDayPer100000: x.sevenDayPer100000,
+      totalInfections: x.totalInfections,
+      currentInfections: x.currentInfections,
+      numberOfHabitantsPerSquareKilometer: x.interest.numberOfHabitants / x.interest.squareKilometers,
+      numberOfHabitants: x.interest.numberOfHabitants,
+      squareKilometers: x.interest.squareKilometers
+  }));
+console.log(stats);
     var states = [{
         id: 'de-bw-08226000',
         name: 'Rhein-Neckar-Kreis'
