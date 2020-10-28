@@ -2,7 +2,7 @@ import got from 'got';
 import moment from 'moment';
 import PDFParser from "pdf2json";
 import { JSDOM } from 'jsdom';
-import interests from './interests.js';
+import { generateStats } from './statistics.js';
 import { getOrSave } from './crawlerCache.js';
 
 const baseUri = 'https://www.rhein-neckar-kreis.de';
@@ -48,51 +48,8 @@ const crawlData = async () => {
     };
 }
 
-const generateStats = resolvedRows => {
-    const dataForSevenDays = resolvedRows.filter(onlyLastSevenDays);
-
-    const first = dataForSevenDays[0];
-    const last = dataForSevenDays[dataForSevenDays.length - 1];
-
-    const getNumberOfIncreasedInfections = city => {
-        const oldest = first.additionalData.filter(data => data.city === city)[0];
-        const newest = last.additionalData.filter(data => data.city === city)[0];
-
-        return {
-            increasedInfectionsForSevenDays: newest.totalInfections - oldest.totalInfections,
-            totalInfections: newest.totalInfections,
-            currentInfections: newest.currentInfections,
-        };
-    }
-
-    const infectionsPerCity = interests
-        .map(interest => ({
-            interest: interest,
-            ...getNumberOfIncreasedInfections(interest.city)
-        }))
-        .map(data => ({
-            ...data,
-            sevenDayPer100000: data.increasedInfectionsForSevenDays / data.interest.numberOfHabitants * 100000
-        }));
-    
-    return {
-        latestDataAt: last.date,
-        range: {
-            from: first.date,
-            to: last.date
-        },
-        infectionsPerCity
-    };
-}
-
 const hasChildren = node => node.children.length > 0;
 const onlyValidData = data => data.size > 100;
-const onlyLastSevenDays = (row, _, rows) => {
-    const maxDate = moment.max(rows.map(x => moment(x.date)));
-    const sevenDaysAgo = moment(maxDate).subtract(7, 'days');
-
-    return moment(row.date).isAfter(sevenDaysAgo);
-};
 
 const getDate = node => moment(node.children[1].children[0].innerHTML.split(' ')[0], "YYMMDD");
 const getSize = node => parseInt(node.children[3].children[0].firstChild.textContent);

@@ -18,15 +18,23 @@ registerChart('chart-overview', async chartLink => {
     data: []
   };
 
-  data.availableData.forEach((day, index) => {
-    const currentInfections = day.additionalData.reduce((prev, row) => prev + row.currentInfections, 0);
-    const totalInfections = day.additionalData.reduce((prev, row) => prev + row.totalInfections, 0);
-    
-    currentInfectionsSeries.data.push(currentInfections);
-    totalInfectionsSeries.data.push(totalInfections);
+  const increasedInfectionsForSevenDaysSeries = {
+    name: '7-Tage-Inzidenz',
+    type: 'spline',
+    yAxis: 2,
+    data: [],
+    tooltip: {
+      valueDecimals: 1
+    }
+  };
+
+  data.stats.globalPerDay.map(day => {
+    currentInfectionsSeries.data.push(day.currentInfections);
+    totalInfectionsSeries.data.push(day.totalInfections);
+    increasedInfectionsForSevenDaysSeries.data.push(day.increasedInfectionsForSevenDays);
   });
 
-  const series = [currentInfectionsSeries, totalInfectionsSeries];
+  const series = [currentInfectionsSeries, totalInfectionsSeries, increasedInfectionsForSevenDaysSeries];
 
   Highcharts.chart('chart-overview', {
     chart: {
@@ -67,6 +75,18 @@ registerChart('chart-overview', async chartLink => {
         }
       },
       opposite: true
+    }, {
+      title: {
+        text: '7-Tage-Inzidenz',
+        style: {
+          color: Highcharts.getOptions().colors[2]
+        }
+      },
+      labels: {
+        style: {
+          color: Highcharts.getOptions().colors[2]
+        }
+      },
     }],
     tooltip: {
       shared: true

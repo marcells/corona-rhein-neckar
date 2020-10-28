@@ -56,5 +56,5 @@ export default [
     { city: 'Wiesenbach', numberOfHabitants: 3109, squareKilometers: 11.1, coords: { lat: 49.361389, lon: 8.802778 } },
     { city: 'Wiesloch', numberOfHabitants: 26706, squareKilometers: 30.3, coords: { lat: 49.294167, lon: 8.698333 } },
     { city: 'Wilhelmsfeld', numberOfHabitants: 3171, squareKilometers: 4.8, coords: { lat: 49.470278, lon: 8.753611 } },
-    { city: 'Zuzenhausen', numberOfHabitants: 218, squareKilometers: 11.6, coords: { lat: 49.297222, lon: 8.822222 } },
+    { city: 'Zuzenhausen', numberOfHabitants: 2180, squareKilometers: 11.6, coords: { lat: 49.297222, lon: 8.822222 } },
 ];
