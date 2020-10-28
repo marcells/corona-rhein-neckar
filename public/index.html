@@ -5,20 +5,53 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="favicon.png">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.3.6/proj4.js"></script>
+    <script src="https://code.highcharts.com/maps/highmaps.js"></script>
+    <script src="https://code.highcharts.com/highcharts-more.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script src="https://code.highcharts.com/modules/export-data.js"></script>
     <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    <script src="https://code.highcharts.com/mapdata/countries/de/de-all-all.js"></script>
 
     <title>Corona Rhein-Neckar</title>
   </head>
   <body>
-    <figure class="highcharts-figure">
-        <div id="container"></div>
+    <div class="main">
+      <div class="header">
+        <img class="logo" src="favicon.png" />
+        <span class="title">Corona Rhein-Neckar-Kreis</span>
+
+        <span class="repo">
+          <img src="GitHub-Mark-32px.png" />
+          <a href="https://github.com/marcells/corona-rhein-neckar" target="_blank">marcells/corona-rhein-neckar</a>
+        </span>
         
-        <div id="container2"></div>
+        <span class="lastUpdate" title="Am Wochenende werden vom Rhein-Neckar-Kreis keine neuen Daten bereitgestellt. Unter der Woche werden die Daten normalerweise im Laufe des Tages aktualisiert.">
+          <span>Letzte Aktualisierung vom:</span>
+          <span id="latestDataAt">[wird abgerufen]</span>
+      </div>
+
+      <ul id="chartLinks"></ul>
+    </div>
+
+    <figure class="highcharts-figure">
     </figure>
 
-    <script src="logic.js"></script>
+    <div id="chartIsLoading" style="display:none">
+      <span id="loadingMessage"></span>
+    </div>
+
+    <script src="chartRegistration.js"></script>
+    <script src="chart1.js"></script>
+    <script src="chart2.js"></script>
+    <script src="chart3.js"></script>
+    <script src="chart4.js"></script>
+    <script src="chart5.js"></script>
+    <script src="chart6.js"></script>
+    <script src="menuBuilder.js"></script>
   </body>
 </html>

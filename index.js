@@ -1,5 +1,6 @@
 import express from 'express';
 import loadData from './crawler.js';
+import { reset } from './crawlerCache.js'
 
 const app = express()
 const port = 3000
@@ -11,18 +12,13 @@ app.get('/api', async (_, res) => {
     res.send(data);
 });
 
-app.listen(port, () => {
-    console.log(`Corona-Scraper listening at http://localhost:${port}`)
+app.put('/api/reset', async (_, res) => {
+    await reset(new Date());
+    res.sendStatus(200);
 });
 
-// // Enable this for debug output on console
-// (async function() {
-//     const { stats, availableData } = await loadData();
-
-//     availableData.forEach(x => {
-//         console.log(`${x.additionalData.length} | ${x.date} | ${x.size}`)
-//     });
-
-//     console.log(stats.range);
-//     console.table(stats.infectionsPerCity);
-// })();
+app.listen(port, () => {
+    console.log(`Corona-Scraper listening at http://localhost:${port}`)
+    console.log();
+    console.log(`Open your browser on http://localhost:${port} to see the current statistics.`)
+});
