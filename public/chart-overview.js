@@ -50,7 +50,6 @@ registerChart('chart-overview', async chartLink => {
         }
       },
       labels: {
-        format: '{value} Fälle',
         style: {
           color: Highcharts.getOptions().colors[0]
         }
@@ -63,7 +62,6 @@ registerChart('chart-overview', async chartLink => {
         }
       },
       labels: {
-        format: '{value} Fälle',
         style: {
           color: Highcharts.getOptions().colors[1]
         }
