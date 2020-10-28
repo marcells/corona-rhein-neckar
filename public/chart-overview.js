@@ -1,4 +1,4 @@
-registerChart('chart7', async chartLink => {
+registerChart('chart-overview', async chartLink => {
   const response = await fetch('/api');
   const data = await response.json();
 
@@ -28,7 +28,7 @@ registerChart('chart7', async chartLink => {
 
   const series = [currentInfectionsSeries, totalInfectionsSeries];
 
-  Highcharts.chart('chart7', {
+  Highcharts.chart('chart-overview', {
     chart: {
       zoomType: 'xy',
       height: 800,

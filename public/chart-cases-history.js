@@ -1,4 +1,4 @@
-registerChart('chart2', async chartLink => {
+registerChart('chart-cases-history', async chartLink => {
   const response = await fetch('/api');
   const data = await response.json();
 
@@ -21,7 +21,7 @@ registerChart('chart2', async chartLink => {
     });
   });
 
-  Highcharts.chart('chart2', {
+  Highcharts.chart('chart-cases-history', {
     chart: {
         type: 'line',
         height: 800,

@@ -1,4 +1,4 @@
-registerChart('chart3', async chartLink => {
+registerChart('chart-population', async chartLink => {
   const response = await fetch('/api');
   const data = await response.json();
 
@@ -15,7 +15,7 @@ registerChart('chart3', async chartLink => {
     squareKilometers: x.interest.squareKilometers
   }));
 
-  Highcharts.chart('chart3', {
+  Highcharts.chart('chart-population', {
     chart: {
         type: 'bubble',
         plotBorderWidth: 1,
