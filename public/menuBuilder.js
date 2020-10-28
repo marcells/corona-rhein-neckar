@@ -1,4 +1,5 @@
 const chartLinks = [
+  { chartName: 'Überblick', containerId: 'chart7' },
   { chartName: '7-Tages-Inzidenz, Gesamte Infektionen, Aktuell Infizierte', containerId: 'chart1' }, 
   { chartName: 'Verlauf Aktuelle Infektionen', containerId: 'chart2' },
   { chartName: 'Verhältnis Infektionen zu Bevölkerungsdichte', containerId: 'chart3' },
