@@ -18,7 +18,7 @@ registerChart('chart-toiletpaper', async chartLink => {
       text: chartLink.chartName
     },
     subtitle: {
-      text: '<b>❗ Die Daten beziehen nur auf DM-Drogerien und liegen leider nicht für alle Städte vor. ❗</b>'
+      text: '<b>❗ Die Daten beziehen sich nur auf DM-Drogerien und liegen leider nicht für alle Städte vor. ❗</b>'
     },
     xAxis: {
       categories: cities,
