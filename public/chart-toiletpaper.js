@@ -4,6 +4,7 @@ registerChart('chart-toiletpaper', async chartLink => {
 
   const cities = data.stats.toiletPaperPerCity.map(x => x.interest);
   const amountOfToiletPaper = data.stats.toiletPaperPerCity.map(x => x.amount);
+  const sevenDayPer100000 = data.stats.infectionsPerCity.map(x => x.sevenDayPer100000);
   const currentInfections = data.stats.infectionsPerCity.map(x => x.currentInfections);
   const totalInfections = data.stats.infectionsPerCity.map(x => x.totalInfections);
 
@@ -41,7 +42,7 @@ registerChart('chart-toiletpaper', async chartLink => {
     }, {
       min: 0,
       title: {
-        text: 'Anzahl Infektionen'
+        text: 'Wert'
       },
       opposite: true
     }],
@@ -77,6 +78,14 @@ registerChart('chart-toiletpaper', async chartLink => {
       name: 'Aktuell Infizierte',
       data: currentInfections,
       visible: false,
+    }, {
+      yAxis: 1,
+      name: '7-Tage-Inzidenz',
+      data: sevenDayPer100000,
+      visible: false,
+      tooltip: {
+        valueDecimals: 1,
+      }
     }]
   });
 });
