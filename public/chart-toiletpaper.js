@@ -16,7 +16,7 @@ registerChart('chart-toiletpaper', async chartLink => {
       text: chartLink.chartName
     },
     subtitle: {
-      text: 'Quelle: rhein-neckar-kreis.de'
+      text: '<b>Daten liegen leider nicht für alle Städte vor</b>'
     },
     xAxis: {
       categories: cities,
@@ -28,22 +28,28 @@ registerChart('chart-toiletpaper', async chartLink => {
     yAxis: [{
       min: 0,
       title: {
-        text: 'Packungen'
+        text: 'Packungen',
+        style: {
+          color: Highcharts.getOptions().colors[0]
+        }
       },
-      opposite: true
+      labels: {
+        style: {
+          color: Highcharts.getOptions().colors[0]
+        }
+      },
     }, {
       min: 0,
       title: {
-        text: 'Anzahl'
-      }
+        text: 'Anzahl Infektionen'
+      },
+      opposite: true
     }],
     tooltip: {
       headerFormat: '<h3>{point.key.city}</h3><table>' +
-        '<tr><td>Einwohner</td><td>{point.key.numberOfHabitants} Einwohner</td></tr>' +
-        '<tr><td>Fläche:</td><td>{point.key.squareKilometers:.1f} km²</td></tr>',
-      pointFormat: '<tr><td style="color:{series.color};padding:0"><b>{series.name}: </b></td>' +
-        '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
-      footerFormat: '</table>',
+        '<tr><td>Einwohner:</td><td>{point.key.numberOfHabitants} Einwohner</td></tr>' +
+        '<tr><td>Fläche:</td><td>{point.key.squareKilometers:.1f} km²</td></tr></table>' +
+        '<br/>',
       shared: true,
       useHTML: true
     },
@@ -58,16 +64,19 @@ registerChart('chart-toiletpaper', async chartLink => {
       name: 'Toilettenpapier (DM-Supermärkte)',
       data: amountOfToiletPaper,
       tooltip: {
-        valueDecimals: 0
+        valueDecimals: 0,
+        valueSuffix: ' Packungen'
       }
     }, {
       yAxis: 1,
       name: 'Gesamte Infektionen',
-      data: totalInfections
+      data: totalInfections,
+      visible: false,
     }, {
       yAxis: 1,
       name: 'Aktuell Infizierte',
-      data: currentInfections
+      data: currentInfections,
+      visible: false,
     }]
   });
 });
