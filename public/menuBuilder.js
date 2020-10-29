@@ -1,11 +1,12 @@
 const chartLinks = [
-  { chartName: 'Überblick', containerId: 'chart-overview' },
-  { chartName: '7-Tages-Inzidenz, Gesamte Infektionen, Aktuell Infizierte', containerId: 'chart-seven-days-incidence' }, 
-  { chartName: 'Verlauf Aktuelle Infektionen', containerId: 'chart-cases-history' },
-  { chartName: 'Verhältnis Infektionen zu Bevölkerungsdichte', containerId: 'chart-population' },
-  { chartName: 'Karte: Gesamte Infektionen', containerId: 'chart-map-total-cases' },
-  { chartName: 'Karte: 7-Tage-Inzidenz', containerId: 'chart-map-seven-days-incidence' },
-  { chartName: 'Karte: Verlauf Aktuelle Infektionen', containerId: 'chart-map-history' },
+  { chartName: '📈 Überblick', containerId: 'chart-overview' },
+  { chartName: '📈 7-Tages-Inzidenz, Gesamte Infektionen, Aktuell Infizierte', containerId: 'chart-seven-days-incidence' }, 
+  { chartName: '📈 Verlauf Aktuelle Infektionen', containerId: 'chart-cases-history' },
+  { chartName: '📈 Verhältnis Infektionen zu Bevölkerungsdichte', containerId: 'chart-population' },
+  { chartName: '🌍 Gesamte Infektionen', containerId: 'chart-map-total-cases' },
+  { chartName: '🌍 7-Tage-Inzidenz', containerId: 'chart-map-seven-days-incidence' },
+  { chartName: '🌍 Verlauf Aktuelle Infektionen', containerId: 'chart-map-history' },
+  { chartName: '🧻 Toilettenpapier', containerId: 'chart-toiletpaper' },
 ];
 
 const buildChartsMenu = () => {

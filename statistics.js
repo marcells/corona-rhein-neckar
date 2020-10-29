@@ -34,14 +34,10 @@ const generateGlobalInfections = rnkData => {
 
 const generateToiletPaperPerCity = toiletPaperData =>
   interests
-    .map(interest => {
-      const toiletPaper = toiletPaperData.find(data => data.store.city === interest.city);
-      
-      return {
+    .map(interest => ({
         interest,
-        amount: toiletPaper !== undefined ? toiletPaper.amount : null
-      };
-    });
+        amount: getToiletPaperAmountForCity(toiletPaperData, interest.city),
+      }));
 
 const generateGlobalPerDay = rnkData => {
   const globalPerDay = rnkData.map((row, index, array) => {
@@ -102,3 +98,9 @@ const getInfectionsByCity = dataForSevenDays => {
 
   return infectionsPerCity;
 };
+
+const getToiletPaperAmountForCity = (toiletPaperData, city) => {
+  const toiletPaper = toiletPaperData.find(data => data.store.city === city);
+
+  return toiletPaper !== undefined ? toiletPaper.amount : null;
+}
