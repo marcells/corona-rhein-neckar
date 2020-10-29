@@ -29,7 +29,7 @@ registerChart('chart-toiletpaper', async chartLink => {
     yAxis: [{
       min: 0,
       title: {
-        text: 'Packungen',
+        text: 'Verfügbare Packungen',
         style: {
           color: Highcharts.getOptions().colors[0]
         }
@@ -66,7 +66,7 @@ registerChart('chart-toiletpaper', async chartLink => {
       data: amountOfToiletPaper,
       tooltip: {
         valueDecimals: 0,
-        valueSuffix: ' Packungen'
+        valueSuffix: ' verfügbare Packungen'
       }
     }, {
       yAxis: 1,
