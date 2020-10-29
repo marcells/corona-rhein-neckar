@@ -1,4 +1,4 @@
-registerChart('chart6', async chartLink => {
+registerChart('chart-map-history', async chartLink => {
   const response = await fetch('/api');
   const data = await response.json();
 
@@ -37,7 +37,7 @@ registerChart('chart6', async chartLink => {
     name: 'Rhein-Neckar-Kreis'
   }];
 
-  const chart = Highcharts.mapChart('chart6', {
+  const chart = Highcharts.mapChart('chart-map-history', {
     chart: {
       height: 800,
       events: {

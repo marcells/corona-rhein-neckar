@@ -31,8 +31,34 @@ app.get('/api/toiletpaper/:storeId', async (req, res) => {
     res.send(ammount);
 });
 
-app.listen(port, () => {
+app.listen(port, async () => {
     console.log(`Corona-Scraper listening at http://localhost:${port}`)
     console.log();
-    console.log(`Open your browser on http://localhost:${port} to see the current statistics.`)
+    console.log(`Open your browser on http://localhost:${port} to see the current statistics.`);
+    console.log();
+    await startCacheRefresher();
 });
+
+export const startCacheRefresher = async () => {
+  await preLoadData();
+  scheduleTimeout();
+
+  function getIntervalUntilNextHour () {
+    return 3600000 - new Date().getTime() % 3600000;
+  }
+
+  function scheduleTimeout () {
+    console.log(`Next automatic cache update in ${getIntervalUntilNextHour() / 1000} seconds...`);
+
+    setTimeout(async () => {
+      await preLoadData();
+
+      scheduleTimeout();
+    }, getIntervalUntilNextHour());
+  }
+
+  async function preLoadData() {
+    console.log('Preloading data...');
+    await loadData();
+  }
+};

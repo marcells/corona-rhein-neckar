@@ -1,4 +1,4 @@
-registerChart('chart1', async chartLink => {
+registerChart('chart-seven-days-incidence', async chartLink => {
   const response = await fetch('/api');
   const data = await response.json();
 
@@ -7,7 +7,7 @@ registerChart('chart1', async chartLink => {
   const totalInfections = data.stats.infectionsPerCity.map(x => x.totalInfections);
   const currentInfections = data.stats.infectionsPerCity.map(x => x.currentInfections);
 
-  Highcharts.chart('chart1', {
+  Highcharts.chart('chart-seven-days-incidence', {
       chart: {
           type: 'column',
           height: 800,

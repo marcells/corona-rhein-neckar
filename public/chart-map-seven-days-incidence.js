@@ -1,4 +1,4 @@
-registerChart('chart5', async chartLink => {
+registerChart('chart-map-seven-days-incidence', async chartLink => {
    const response = await fetch('/api');
    const data = await response.json();
 
@@ -19,7 +19,7 @@ console.log(stats);
         name: 'Rhein-Neckar-Kreis'
     }];
 
-  Highcharts.mapChart('chart5', {
+  Highcharts.mapChart('chart-map-seven-days-incidence', {
     chart: {
         height: 800,
         events: {
