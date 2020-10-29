@@ -4,49 +4,77 @@ import PDFParser from "pdf2json";
 import { JSDOM } from 'jsdom';
 import { generateStats } from './statistics.js';
 import { getOrSave } from './crawlerCache.js';
+import { stores, amountPerStore } from './toiletpaper.js';
 
 const baseUri = 'https://www.rhein-neckar-kreis.de';
 const url = `${baseUri}/start/landratsamt/coronavirus+fallzahlen.html`;
 
 const crawlData = async () => {
-    const availableData = await getOrSave(new Date(), async () => {
-        console.log(`Loading ${url}...`);
+    const rnkData = await crawlRnkData();
+    const toiletPaperData = await crawlToiletPaperData();
 
-        const response = await got(url);
-        const dom = new JSDOM(response.body, { includeNodeLocations: true });
-        const dates = [...dom.window.document.getElementsByClassName('dlDate')]
-
-        console.log(`Loading pdfs and parsing data `);
-
-        const crawledAvailableData = dates
-            .filter(hasChildren)
-            .map(x => ({
-                date: getDate(x.parentNode),
-                size: getSize(x.parentNode),
-                url: getUrl(x.parentNode)
-            }))
-            .filter(onlyValidData)
-            .map(async x => ({
-                ...x,
-                additionalData: await loadPdf(x.url)
-            }));
-    
-        const crawledData = await Promise.all(crawledAvailableData);
-
-        console.log();
-        console.log('Finished loading.')
-        console.log();
-
-        return crawledData;
-    });
-
-    const stats = generateStats(availableData);
+    const stats = generateStats(rnkData, toiletPaperData);
 
     return {
-        availableData,
+        availableData: rnkData,
+        toiletPaperData,
         stats
     };
 }
+
+const crawlToiletPaperData = async () =>
+  await getOrSave('toiletpaper', new Date(), async () => {
+    console.log(`Loading toiletpaper amount...`);
+
+    const crawledAvailableData = stores
+        .map(async x => ({
+            store: x,
+            amountPerStoreResult: await amountPerStore(x.id)
+        }));
+
+    const crawledData = await Promise.all(crawledAvailableData);
+
+    console.log();
+    console.log('Finished loading.')
+    console.log();
+
+    return crawledData.map(x => ({
+      store: x.store,
+      amount: x.amountPerStoreResult.amount
+    }));
+  });
+
+const crawlRnkData = async () =>
+  await getOrSave('rnk', new Date(), async () => {
+    console.log(`Loading ${url}...`);
+
+    const response = await got(url);
+    const dom = new JSDOM(response.body, { includeNodeLocations: true });
+    const dates = [...dom.window.document.getElementsByClassName('dlDate')]
+
+    console.log(`Loading pdfs and parsing data `);
+
+    const crawledAvailableData = dates
+        .filter(hasChildren)
+        .map(x => ({
+            date: getDate(x.parentNode),
+            size: getSize(x.parentNode),
+            url: getUrl(x.parentNode)
+        }))
+        .filter(onlyValidData)
+        .map(async x => ({
+            ...x,
+            additionalData: await loadPdf(x.url)
+        }));
+
+    const crawledData = await Promise.all(crawledAvailableData);
+
+    console.log();
+    console.log('Finished loading.')
+    console.log();
+
+    return crawledData;
+  });
 
 const hasChildren = node => node.children.length > 0;
 const onlyValidData = data => data.size > 100;

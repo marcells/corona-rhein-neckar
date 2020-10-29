@@ -1,29 +1,30 @@
 import moment from 'moment';
 import interests from './interests.js';
 
-export const generateStats = resolvedRows => {
+export const generateStats = (rnkData, toiletPaperData) => {
   return {
-    latestDataAt: generateLatestDataAt(resolvedRows),
-    infectionsPerCity: generateInfectionsPerCity(resolvedRows),
-    globalInfections: generateGlobalInfections(resolvedRows),
-    globalPerDay: generateGlobalPerDay(resolvedRows)
+    latestDataAt: generateLatestDataAt(rnkData),
+    infectionsPerCity: generateInfectionsPerCity(rnkData),
+    globalInfections: generateGlobalInfections(rnkData),
+    globalPerDay: generateGlobalPerDay(rnkData),
+    toiletPaperPerCity: generateToiletPaperPerCity(toiletPaperData),
   };
 }
 
-const generateLatestDataAt = resolvedRows => {
-  const last = resolvedRows[resolvedRows.length - 1];
+const generateLatestDataAt = rnkData => {
+  const last = rnkData[rnkData.length - 1];
 
   return last.date;
 };
 
-const generateInfectionsPerCity = resolvedRows => {
-  const dataForSevenDays = resolvedRows.filter(onlyLastSevenDays);
+const generateInfectionsPerCity = rnkData => {
+  const dataForSevenDays = rnkData.filter(onlyLastSevenDays);
 
   return getInfectionsByCity(dataForSevenDays);
 };
 
-const generateGlobalInfections = resolvedRows => {
-  const last = resolvedRows[resolvedRows.length - 1];
+const generateGlobalInfections = rnkData => {
+  const last = rnkData[rnkData.length - 1];
 
   return {
     currentInfections: sum(last.additionalData, row => row.currentInfections),
@@ -31,8 +32,19 @@ const generateGlobalInfections = resolvedRows => {
   };
 };
 
-const generateGlobalPerDay = resolvedRows => {
-  const globalPerDay = resolvedRows.map((row, index, array) => {
+const generateToiletPaperPerCity = toiletPaperData =>
+  interests
+    .map(interest => {
+      const toiletPaper = toiletPaperData.find(data => data.store.city === interest.city);
+      
+      return {
+        interest,
+        amount: toiletPaper !== undefined ? toiletPaper.amount : null
+      };
+    });
+
+const generateGlobalPerDay = rnkData => {
+  const globalPerDay = rnkData.map((row, index, array) => {
     const rows = array.slice(0, index + 1);
     const dataForSevenDays = rows.filter(onlyLastSevenDays);
 

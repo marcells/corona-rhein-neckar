@@ -14,8 +14,8 @@ export const reset = async (date) => {
     }
 }
 
-export const getOrSave = async (date, action) => {
-    const fileName = getFileName(date);
+export const getOrSave = async (key, date, action) => {
+    const fileName = getFileName(key, date);
     
     createDirectoryIfNotExists(cacheDirectory);
 
@@ -41,4 +41,4 @@ const createDirectoryIfNotExists = path => {
     }
 }
 
-const getFileName = date => path.join(cacheDirectory, moment(date).format('YYYY_MM_DD_HH'));
+const getFileName = (key, date) => path.join(cacheDirectory, `${moment(date).format('YYYY_MM_DD_HH')}-${key}`);

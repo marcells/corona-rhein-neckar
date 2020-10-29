@@ -28,14 +28,14 @@ export const stores = [
     { city: 'Wiesloch', address: 'Güterstraße 1', id: 1656 },
 ];
 
-export const ammountPerStore = async (storeId) => {
+export const amountPerStore = async (storeId) => {
     const {city, address} = stores.find(s => s.id === storeId);
 
     const url = `https://products.dm.de/store-availability/DE/availability?dans=595420,708997,137425,28171,485698,799358,863567,452740,610544,846857,709006,452753,879536,452744,485695,853483,594080,504606,593761,525943,842480,535981,127048,524535&storeNumbers=${storeId}`;
     const response = await got(url);
     const storeAvailabilities = JSON.parse(response.body).storeAvailabilities;
-    const ammount = Object.values(storeAvailabilities)
+    const amount = Object.values(storeAvailabilities)
         .map((ent) => ent[0].stockLevel)
         .reduce((prev, curr) => prev + curr, 0);
-    return { city, address, ammount };
+    return { city, address, amount };
 };
