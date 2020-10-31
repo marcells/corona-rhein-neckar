@@ -3,7 +3,7 @@ import moment from 'moment';
 import PDFParser from "pdf2json";
 import parse from "csv-parse/lib/sync.js";
 import { JSDOM } from 'jsdom';
-import { generateStats } from './statistics.js';
+import { generateStats } from './statistics/index.js';
 import { getOrSave } from './crawlerCache.js';
 import { stores, amountPerStore } from './toiletpaper.js';
 

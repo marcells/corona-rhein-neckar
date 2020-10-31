@@ -6,8 +6,8 @@ import moment from 'moment';
 const currentDirectory = path.dirname(fileURLToPath(import.meta.url));
 const cacheDirectory = path.join(currentDirectory, '.crawlerCache');
 
-export const reset = async (date) => {
-    const fileName = getFileName(date);
+export const reset = async (key, date) => {
+    const fileName = getFileName(key, date);
 
     if (fs.existsSync(fileName)) {
         await fs.promises.unlink(fileName);
