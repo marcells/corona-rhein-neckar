@@ -28,13 +28,26 @@ registerChart('chart-overview', async chartLink => {
     }
   };
 
+  const airSeries = {
+    name: 'Feinstaub',
+    type: 'spline',
+    yAxis: 3,
+    data: [],
+    tooltip: {
+      valueSuffix: '  µg/m³',
+      valueDecimals: 2
+    },
+    visible: false,
+  };
+
   data.stats.globalPerDay.map(day => {
     currentInfectionsSeries.data.push(day.currentInfections);
     totalInfectionsSeries.data.push(day.totalInfections);
     increasedInfectionsForSevenDaysSeries.data.push(day.increasedInfectionsForSevenDays);
+    airSeries.data.push(day.airDataAverage);
   });
 
-  const series = [currentInfectionsSeries, totalInfectionsSeries, increasedInfectionsForSevenDaysSeries];
+  const series = [currentInfectionsSeries, totalInfectionsSeries, increasedInfectionsForSevenDaysSeries, airSeries];
 
   Highcharts.chart('chart-overview', {
     chart: {
@@ -87,6 +100,8 @@ registerChart('chart-overview', async chartLink => {
           color: Highcharts.getOptions().colors[2]
         }
       },
+    }, {
+      visible: false
     }],
     tooltip: {
       shared: true
