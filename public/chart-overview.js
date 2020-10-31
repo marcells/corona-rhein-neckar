@@ -2,7 +2,7 @@ registerChart('chart-overview', async chartLink => {
   const response = await fetch('/api');
   const data = await response.json();
 
-  const days = data.availableData.map(x => new Date(x.date).toLocaleDateString());
+  const days = data.rnkData.map(x => new Date(x.date).toLocaleDateString());
 
   const currentInfectionsSeries = {
     name: 'Aktuelle Infektionen',

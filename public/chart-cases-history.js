@@ -2,10 +2,10 @@ registerChart('chart-cases-history', async chartLink => {
   const response = await fetch('/api');
   const data = await response.json();
 
-  const days = data.availableData.map(x => new Date(x.date).toLocaleDateString());
+  const days = data.rnkData.map(x => new Date(x.date).toLocaleDateString());
 
   const series = [];
-  data.availableData.forEach((day, index) => {
+  data.rnkData.forEach((day, index) => {
     day.additionalData.forEach(row => {
       const foundSeries = series.find(x => x.name == row.city);
 

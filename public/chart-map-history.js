@@ -3,10 +3,10 @@ registerChart('chart-map-history', async chartLink => {
   const data = await response.json();
 
   const cities = data.stats.infectionsPerCity.map(x => x.interest);
-  const days = data.availableData.map(x => new Date(x.date));
+  const days = data.rnkData.map(x => new Date(x.date));
 
-  const series = data.availableData
-    .map((day, index) => {
+  const series = data.rnkData
+    .map((day, _) => {
       const data = day.additionalData.map(row => {
         const city = cities.find(x => x.city == row.city);
 

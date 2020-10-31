@@ -1,53 +1,13 @@
 import got from 'got';
 import moment from 'moment';
 import PDFParser from "pdf2json";
-import parse from "csv-parse/lib/sync.js";
 import { JSDOM } from 'jsdom';
-import { generateStats } from './statistics/index.js';
-import { getOrSave } from './crawlerCache.js';
-import { stores, amountPerStore } from './toiletpaper.js';
+import { getOrSave } from '../crawlerCache.js';
 
 const baseUri = 'https://www.rhein-neckar-kreis.de';
 const url = `${baseUri}/start/landratsamt/coronavirus+fallzahlen.html`;
 
-const crawlData = async () => {
-    const rnkData = await crawlRnkData();
-    const toiletPaperData = await crawlToiletPaperData();
-    const airData = await crawlAirData();
-
-    const stats = generateStats(rnkData, toiletPaperData, airData);
-
-    return {
-        availableData: rnkData,
-        toiletPaperData,
-        airData,
-        stats
-    };
-}
-
-const crawlToiletPaperData = async () =>
-  await getOrSave('toiletpaper', new Date(), async () => {
-    console.log(`Loading toiletpaper amount...`);
-
-    const crawledAvailableData = stores
-        .map(async x => ({
-            store: x,
-            amountPerStoreResult: await amountPerStore(x.id)
-        }));
-
-    const crawledData = await Promise.all(crawledAvailableData);
-
-    console.log();
-    console.log('Finished loading.')
-    console.log();
-
-    return crawledData.map(x => ({
-      store: x.store,
-      amount: x.amountPerStoreResult.amount
-    }));
-  });
-
-const crawlRnkData = async () =>
+export const crawlRnkData = async () =>
   await getOrSave('rnk', new Date(), async () => {
     console.log(`Loading ${url}...`);
 
@@ -77,24 +37,6 @@ const crawlRnkData = async () =>
     console.log();
 
     return crawledData;
-  });
-
-const crawlAirData = async () =>
-  await getOrSave('air', new Date(), async () => {
-    const currentDate = moment().format('YYYY-MM-DD');
-    const airDataUrl = `https://www.umweltbundesamt.de/api/air_data/v2/measures/csv?date_from=2020-10-01&time_from=24&date_to=${currentDate}&time_to=24&data%5B0%5D%5Bco%5D=1&data%5B0%5D%5Bsc%5D=1&data%5B0%5D%5Bda%5D=2020-10-30&data%5B0%5D%5Bti%5D=13&data%5B0%5D%5Bst%5D=216&data%5B0%5D%5Bva%5D=8&data%5B1%5D%5Bco%5D=1&data%5B1%5D%5Bsc%5D=1&data%5B1%5D%5Bda%5D=2020-10-30&data%5B1%5D%5Bti%5D=12&data%5B1%5D%5Bst%5D=299&data%5B1%5D%5Bva%5D=11&data%5B2%5D%5Bco%5D=1&data%5B2%5D%5Bsc%5D=1&data%5B2%5D%5Bda%5D=2020-10-30&data%5B2%5D%5Bti%5D=12&data%5B2%5D%5Bst%5D=220&data%5B2%5D%5Bva%5D=8&data%5B3%5D%5Bco%5D=1&data%5B3%5D%5Bsc%5D=1&data%5B3%5D%5Bda%5D=2020-10-30&data%5B3%5D%5Bti%5D=12&data%5B3%5D%5Bst%5D=221&data%5B3%5D%5Bva%5D=7&lang=de`;
-    const response = await got(airDataUrl);
-    const csvData = response.body;
-
-    return parse(csvData, {
-      cast: true,
-      columns: true,
-      delimiter: ';',
-      relaxColumnCount: true,
-      skipEmptyLines: true,
-      bom: true,
-    })
-    .filter(x => x['Datum']);
   });
 
 const hasChildren = node => node.children.length > 0;
@@ -152,5 +94,3 @@ const textFilterForPage = (text, pageIndex, textIndex, numberOfTexts) => {
         return true;
     }
 };
-
-export default crawlData;

@@ -1,5 +1,5 @@
 import express from 'express';
-import loadData from './crawler.js';
+import { crawlData } from './crawlers/index.js';
 import { reset } from './crawlerCache.js'
 
 const app = express()
@@ -8,13 +8,13 @@ const port = 3000
 app.use(express.static('public'));
 
 app.get('/api', async (_, res) => {
-  const data = await loadData();
+  const data = await crawlData();
   res.send(data);
 });
 
 app.put('/api/reset', async (_, res) => {
   const date = new Date();
-  
+
   await reset('rnk', date);
   await reset('toiletpaper', date);
   await reset('air', date);
@@ -50,6 +50,6 @@ export const startCacheRefresher = async () => {
 
   async function preLoadData() {
     console.log('Preloading data...');
-    await loadData();
+    await crawlData();
   }
 };
