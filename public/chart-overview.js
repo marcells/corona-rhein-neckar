@@ -5,14 +5,14 @@ registerChart('chart-overview', async chartLink => {
   const days = data.rnkData.map(x => new Date(x.date).toLocaleDateString());
 
   const currentInfectionsSeries = {
-    name: 'Aktuelle Infektionen',
+    name: 'Aktuelle Infektionen (RNK)',
     type: 'column',
     yAxis: 0,
     data: []
   };
 
   const totalInfectionsSeries = {
-    name: 'Gesamte Infektionen',
+    name: 'Gesamte Infektionen (RNK)',
     type: 'spline',
     yAxis: 1,
     data: []
@@ -40,14 +40,39 @@ registerChart('chart-overview', async chartLink => {
     visible: false,
   };
 
+  const worldwideCurrentInfectionSeries = {
+    name: 'Aktuelle Infektionen (weltweit)',
+    type: 'column',
+    yAxis: 4,
+    data: [],
+    visible: false,
+  };
+
+  const worldwideTotalInfectionSeries = {
+    name: 'Gesamte Infektionen (weltweit)',
+    type: 'spline',
+    yAxis: 5,
+    data: [],
+    visible: false,
+  };
+
   data.stats.globalPerDay.map(day => {
     currentInfectionsSeries.data.push(day.currentInfections);
     totalInfectionsSeries.data.push(day.totalInfections);
     increasedInfectionsForSevenDaysSeries.data.push(day.increasedInfectionsForSevenDays);
     airSeries.data.push(day.airDataAverage);
+    worldwideCurrentInfectionSeries.data.push(day.worldwideCurrentInfections);
+    worldwideTotalInfectionSeries.data.push(day.worldwideTotalInfections);
   });
 
-  const series = [currentInfectionsSeries, totalInfectionsSeries, increasedInfectionsForSevenDaysSeries, airSeries];
+  const series = [
+    currentInfectionsSeries,
+    totalInfectionsSeries,
+    increasedInfectionsForSevenDaysSeries,
+    airSeries,
+    worldwideCurrentInfectionSeries,
+    worldwideTotalInfectionSeries 
+  ];
 
   Highcharts.chart('chart-overview', {
     chart: {
@@ -100,6 +125,10 @@ registerChart('chart-overview', async chartLink => {
           color: Highcharts.getOptions().colors[2]
         }
       },
+    }, {
+      visible: false
+    }, {
+      visible: false
     }, {
       visible: false
     }],
