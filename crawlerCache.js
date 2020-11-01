@@ -1,5 +1,5 @@
 import path from 'path';
-import fs from 'fs';
+import fs, { stat } from 'fs';
 import { fileURLToPath } from 'url';
 import moment from 'moment';
 
@@ -20,17 +20,17 @@ export const getOrSave = async (key, date, action) => {
     createDirectoryIfNotExists(cacheDirectory);
 
     if (fs.existsSync(fileName)) {
-        console.log(`Read from cache ${fileName}`);
+        console.log(`Read from cache ${fileName} [${await getFileSize(fileName)} bytes]`);
 
         const cachedData = await fs.promises.readFile(fileName);
 
         return JSON.parse(cachedData);
     } else {
         const data = await action();
-
+        
         await fs.promises.writeFile(fileName, JSON.stringify(data));
 
-        console.log(`Saved in cache ${fileName}`);
+        console.log(`Saved in cache ${fileName} [${await getFileSize(fileName)} bytes]`);
         return data;
     }
 }
@@ -42,3 +42,9 @@ const createDirectoryIfNotExists = path => {
 }
 
 const getFileName = (key, date) => path.join(cacheDirectory, `${moment(date).format('YYYY_MM_DD_HH')}-${key}`);
+
+const getFileSize = async fileName => {
+  const stats = await fs.promises.stat(fileName);
+
+  return stats.size;
+}
