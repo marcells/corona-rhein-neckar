@@ -19,7 +19,7 @@ registerChart('chart-overview', async chartLink => {
   };
 
   const increasedInfectionsForSevenDaysSeries = {
-    name: '7-Tage-Inzidenz',
+    name: '7-Tage-Inzidenz (RNK)',
     type: 'spline',
     yAxis: 2,
     data: [],
@@ -29,7 +29,7 @@ registerChart('chart-overview', async chartLink => {
   };
 
   const airSeries = {
-    name: 'Feinstaub',
+    name: 'Feinstaub (RNK)',
     type: 'spline',
     yAxis: 3,
     data: [],
@@ -56,6 +56,17 @@ registerChart('chart-overview', async chartLink => {
     visible: false,
   };
 
+  const worldwideIncreasedInfectionsForSevenDaysSeries = {
+    name: '7-Tage-Inzidenz (weltweit)',
+    type: 'spline',
+    yAxis: 2,
+    data: [],
+    visible: false,
+    tooltip: {
+      valueDecimals: 1
+    }
+  };
+
   data.stats.globalPerDay.map(day => {
     currentInfectionsSeries.data.push(day.currentInfections);
     totalInfectionsSeries.data.push(day.totalInfections);
@@ -63,6 +74,7 @@ registerChart('chart-overview', async chartLink => {
     airSeries.data.push(day.airDataAverage);
     worldwideCurrentInfectionSeries.data.push(day.worldwideCurrentInfections);
     worldwideTotalInfectionSeries.data.push(day.worldwideTotalInfections);
+    worldwideIncreasedInfectionsForSevenDaysSeries.data.push(day.worldwideIncreasedInfectionsForSevenDays);
   });
 
   const series = [
@@ -71,7 +83,8 @@ registerChart('chart-overview', async chartLink => {
     increasedInfectionsForSevenDaysSeries,
     airSeries,
     worldwideCurrentInfectionSeries,
-    worldwideTotalInfectionSeries 
+    worldwideTotalInfectionSeries,
+    worldwideIncreasedInfectionsForSevenDaysSeries
   ];
 
   Highcharts.chart('chart-overview', {
