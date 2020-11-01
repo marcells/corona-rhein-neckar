@@ -2,42 +2,40 @@ import got from 'got';
 import moment from 'moment';
 import PDFParser from "pdf2json";
 import { JSDOM } from 'jsdom';
-import { getOrSave } from '../crawlerCache.js';
 
 const baseUri = 'https://www.rhein-neckar-kreis.de';
 const url = `${baseUri}/start/landratsamt/coronavirus+fallzahlen.html`;
 
-export const crawlRnkData = async () =>
-  await getOrSave('rnk', new Date(), async () => {
-    console.log(`Loading ${url}...`);
+export const crawlRnkData = async () => {
+  console.log(`Loading ${url}...`);
 
-    const response = await got(url);
-    const dom = new JSDOM(response.body, { includeNodeLocations: true });
-    const dates = [...dom.window.document.getElementsByClassName('dlDate')]
+  const response = await got(url);
+  const dom = new JSDOM(response.body, { includeNodeLocations: true });
+  const dates = [...dom.window.document.getElementsByClassName('dlDate')]
 
-    console.log(`Loading pdfs and parsing data `);
+  console.log(`Loading pdfs and parsing data `);
 
-    const crawledAvailableData = dates
-        .filter(hasChildren)
-        .map(x => ({
-            date: getDate(x.parentNode),
-            size: getSize(x.parentNode),
-            url: getUrl(x.parentNode)
-        }))
-        .filter(onlyValidData)
-        .map(async x => ({
-            ...x,
-            additionalData: await loadPdf(x.url)
-        }));
+  const crawledAvailableData = dates
+      .filter(hasChildren)
+      .map(x => ({
+          date: getDate(x.parentNode),
+          size: getSize(x.parentNode),
+          url: getUrl(x.parentNode)
+      }))
+      .filter(onlyValidData)
+      .map(async x => ({
+          ...x,
+          additionalData: await loadPdf(x.url)
+      }));
 
-    const crawledData = await Promise.all(crawledAvailableData);
+  const crawledData = await Promise.all(crawledAvailableData);
 
-    console.log();
-    console.log('Finished loading.')
-    console.log();
+  console.log();
+  console.log('Finished loading.')
+  console.log();
 
-    return crawledData;
-  });
+  return crawledData;
+};
 
 const hasChildren = node => node.children.length > 0;
 const onlyValidData = data => data.size > 100;
