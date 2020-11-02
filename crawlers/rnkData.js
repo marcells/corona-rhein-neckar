@@ -2,6 +2,7 @@ import got from 'got';
 import moment from 'moment';
 import PDFParser from "pdf2json";
 import { JSDOM } from 'jsdom';
+import { sortByDate } from '../helper.js';
 
 const baseUri = 'https://www.rhein-neckar-kreis.de';
 const url = `${baseUri}/start/landratsamt/coronavirus+fallzahlen.html`;
@@ -29,12 +30,13 @@ export const crawlRnkData = async () => {
       }));
 
   const crawledData = await Promise.all(crawledAvailableData);
+  const sortedCrawledData = sortByDate(crawledData, x => x.date);
 
   console.log();
   console.log('Finished loading.')
   console.log();
 
-  return crawledData;
+  return sortedCrawledData;
 };
 
 const hasChildren = node => node.children.length > 0;

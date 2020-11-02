@@ -1,5 +1,6 @@
 import moment from 'moment';
-import { getInfectionsByCity, onlyLastSevenDays, sum, avg } from './helper.js'
+import { getInfectionsByCity, onlyLastSevenDays, sum, avg } from './helper.js';
+import { sortByDate } from '../helper.js';
 
 export const generateGlobalPerDay = (rnkData, airData, worldwideData) => {
   const airDataAverageByDate = getAirDataAverageByDay(airData);
@@ -82,7 +83,7 @@ const getWorldwideSevenDayPer100000 = (worldwideData, day) => {
 
   const worldwideDataForSevenDays = onlyLastSevenDaysOfWorldwideData(worldwideData.timeline, day);
   const population = sum(worldwideData.countries, x => x.population);
-  const sortedWorldwideData = [...worldwideDataForSevenDays].sort((first, second) => first === second ? 0 : moment(first.date).isBefore(moment(second.date)) ? -1 : 1);
+  const sortedWorldwideData = sortByDate(worldwideDataForSevenDays, x => x.date);
 
   const first = sortedWorldwideData[0];
   const last = sortedWorldwideData[sortedWorldwideData.length - 1];
