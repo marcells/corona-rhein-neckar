@@ -1,11 +1,11 @@
 import moment from 'moment';
 import interests from '../interests.js';
 
-export const onlyLastSevenDays = (row, _, rows) => {
+export const onlyLastEightDays = (row, _, rows) => {
   const maxDate = moment.max(rows.map(x => moment(x.date)));
-  const sevenDaysAgo = moment(maxDate).subtract(7, 'days');
+  const eightDaysAgo = moment(maxDate).subtract(8, 'days');
 
-  return moment(row.date).isAfter(sevenDaysAgo);
+  return moment(row.date).isAfter(eightDaysAgo);
 };
 
 export const getInfectionsByCity = dataForSevenDays => {

@@ -1,6 +1,7 @@
 import moment from 'moment';
-import { getInfectionsByCity, onlyLastSevenDays, sum, avg } from './helper.js';
+import { getInfectionsByCity, onlyLastEightDays, sum, avg } from './helper.js';
 import { sortByDate } from '../helper.js';
+import interests from '../interests.js';
 
 export const generateGlobalPerDay = (rnkData, airData, worldwideData) => {
   const airDataAverageByDate = getAirDataAverageByDay(airData);
@@ -9,12 +10,12 @@ export const generateGlobalPerDay = (rnkData, airData, worldwideData) => {
   const globalPerDay = rnkData.map((row, index, array) => {
     const day = moment(row.date).toDate();
     const rows = array.slice(0, index + 1);
-    const rnkDataForSevenDays = rows.filter(onlyLastSevenDays);
-    const infectionsPerCity = getInfectionsByCity(rnkDataForSevenDays);
+    const rnkDataForEightDays = rows.filter(onlyLastEightDays);
+    const infectionsPerCity = getInfectionsByCity(rnkDataForEightDays);
 
     const sumTotalInfections = sum(infectionsPerCity, x => x.totalInfections);
     const sumCurrentInfections = sum(infectionsPerCity, x => x.currentInfections);
-    const averageSevenDayPer100000 = rnkDataForSevenDays.length >= 7 ? avg(infectionsPerCity, x => x.sevenDayPer100000) : null;
+    const averageSevenDayPer100000 = getSevenDayIncidence(rnkDataForEightDays);
     const airDataAverage = airDataAverageByDate.hasOwnProperty(day) ? airDataAverageByDate[day] : null;
     const worldwideTotalInfections = worldwideDataByDate.hasOwnProperty(day) ? worldwideDataByDate[day].totalInfections : null;
     const worldwideCurrentInfections = worldwideDataByDate.hasOwnProperty(day) ? worldwideDataByDate[day].currentInfections : null;
@@ -34,6 +35,18 @@ export const generateGlobalPerDay = (rnkData, airData, worldwideData) => {
 
   return globalPerDay;
 };
+
+const getSevenDayIncidence = rnkDataForEightDays => {
+  if (rnkDataForEightDays.length !== 8) {
+    return null;
+  }
+  const start = sum(rnkDataForEightDays[0].additionalData, x => x.totalInfections);
+  const end = sum(rnkDataForEightDays[rnkDataForEightDays.length-1].additionalData, x => x.totalInfections);
+  const pop = sum(interests, x => x.numberOfHabitants);
+  const averageSevenDayPer100000 = (end - start) / pop * 100000;
+
+  return averageSevenDayPer100000;
+}
 
 const getAirDataAverageByDay = airData => {
   const mappedAirData = airData.map(x => ({
