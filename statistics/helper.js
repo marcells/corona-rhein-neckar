@@ -8,9 +8,9 @@ export const onlyLastEightDays = (row, _, rows) => {
   return moment(row.date).isAfter(eightDaysAgo);
 };
 
-export const getInfectionsByCity = dataForSevenDays => {
-  const first = dataForSevenDays[0];
-  const last = dataForSevenDays[dataForSevenDays.length - 1];
+export const getInfectionsByCity = dataForEightDays => {
+  const first = dataForEightDays[0];
+  const last = dataForEightDays[dataForEightDays.length - 1];
 
   const getNumberOfIncreasedInfections = city => {
     const oldest = first.additionalData.filter(data => data.city === city)[0];

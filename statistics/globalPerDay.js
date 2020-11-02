@@ -81,10 +81,10 @@ const getWorldwideDataByDay = worldwideData => {
 };
 
 const onlyLastSevenDaysOfWorldwideData = (rows, toDay) => {
-  const sevenDaysAgo = moment(toDay).subtract(7, 'days');
+  const eightDaysAgo = moment(toDay).subtract(8, 'days');
 
   return rows.filter(row => 
-    moment(row.date).isAfter(sevenDaysAgo)
+    moment(row.date).isAfter(eightDaysAgo)
     && moment(row.date).isSameOrBefore(moment(toDay)));
 };
 
@@ -95,6 +95,11 @@ const getWorldwideSevenDayPer100000 = (worldwideData, day) => {
     return null;
 
   const worldwideDataForSevenDays = onlyLastSevenDaysOfWorldwideData(worldwideData.timeline, day);
+
+  if (worldwideDataForSevenDays.length !== 8) {
+    return null;
+  }
+
   const population = sum(worldwideData.countries, x => x.population);
   const sortedWorldwideData = sortByDate(worldwideDataForSevenDays, x => x.date);
 
