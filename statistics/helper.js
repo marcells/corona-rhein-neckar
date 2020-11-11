@@ -16,6 +16,16 @@ export const getInfectionsByCity = dataForEightDays => {
     const oldest = first.additionalData.filter(data => data.city === city)[0];
     const newest = last.additionalData.filter(data => data.city === city)[0];
 
+    if (newest === undefined || oldest === undefined) {
+      console.log(`Incorrect data for city '${city}'`);
+
+      return {
+        increasedInfectionsForSevenDays: 0,
+        totalInfections: 0,
+        currentInfections: 0,
+      };
+    }
+
     return {
       increasedInfectionsForSevenDays: newest.totalInfections - oldest.totalInfections,
       totalInfections: newest.totalInfections,

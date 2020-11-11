@@ -57,12 +57,16 @@ const loadPdf = url => {
         pdfPipe.on("pdfParser_dataReady", pdf => {
             // console.log(`Loading url: ${url}`);
     
-            const textsForPages = pdf.formImage.Pages
+            const rawTextsForPages = pdf.formImage.Pages
                 .filter((_, pageIndex) => pageIndex > 0)
                 .map((page, pageIndex) => 
                     page.Texts
                         .filter((text, textIndex, texts) => textFilterForPage(text, pageIndex, textIndex, texts.length))
-                        .map((text, textIndex) => ({ text: decodeURIComponent(text.R[0].T), textIndex })))
+                        .map((text, textIndex) => ({ text: decodeURIComponent(text.R[0].T), textIndex })));
+            
+            autocorrectionOfMissingTexts(rawTextsForPages);
+
+            const textsForPages = rawTextsForPages
                 .flatMap(x => x)
                 .flatMap((_, index, array) => 
                     index % 3 === 0
@@ -94,3 +98,26 @@ const textFilterForPage = (text, pageIndex, textIndex, numberOfTexts) => {
         return true;
     }
 };
+
+const autocorrectionOfMissingTexts = (rawTextsForPages) => {
+  for(let rawTextsForPage of rawTextsForPages) {
+    for(let index = 0; index < rawTextsForPage.length; index++) {
+      const isLabel = isNaN(rawTextsForPage[index].text);
+
+      if (!isLabel) {
+        continue;
+      }
+
+      const isAssumedTotalInfectionsANumber = isNaN(rawTextsForPage[index + 1].text);
+      const isAssumedCurrentInfectionsANumber = isNaN(rawTextsForPage[index + 2].text);
+
+      if (isAssumedTotalInfectionsANumber) {
+        rawTextsForPage.splice(index + 1, 0, { text: '0', autoCorrection: true});
+      }
+
+      if (isAssumedCurrentInfectionsANumber) {
+        rawTextsForPage.splice(index + 2, 0, { text: '0', autoCorrection: true});
+      }
+    }
+  }
+}
