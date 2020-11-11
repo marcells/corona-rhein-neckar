@@ -112,7 +112,7 @@ const autocorrectionOfMissingTexts = (rawTextsForPages) => {
       const isAssumedCurrentInfectionsANumber = isNaN(rawTextsForPage[index + 2].text);
 
       if (isAssumedTotalInfectionsANumber) {
-        rawTextsForPage.splice(index + 1, 0, { text: '0', autoCorrection: true});
+        throw new Error('Total infections have to be given in PDF.')
       }
 
       if (isAssumedCurrentInfectionsANumber) {
