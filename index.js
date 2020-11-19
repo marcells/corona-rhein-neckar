@@ -18,6 +18,8 @@ app.put('/api/reset', async (_, res) => {
   await reset('rnk', date);
   await reset('toiletpaper', date);
   await reset('air', date);
+  await reset('worldwide', date);
+  await reset('stats', date);
 
   res.sendStatus(200);
 });

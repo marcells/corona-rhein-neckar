@@ -11,7 +11,8 @@ export const crawlData = async () => {
   const airData = await getOrSave('air', new Date(), crawlAirData);
   const worldwideData = await getOrSave('worldwide', new Date(), crawlWorldwideData);
 
-  const stats = generateStats(rnkData, toiletPaperData, airData, worldwideData);
+  // const stats = generateStats(rnkData, toiletPaperData, airData, worldwideData);
+  const stats = await getOrSave('stats', new Date(), () => Promise.resolve(generateStats(rnkData, toiletPaperData, airData, worldwideData)));
 
   return {
       rnkData,
