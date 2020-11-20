@@ -3,6 +3,7 @@ import moment from 'moment';
 import PDFParser from "pdf2json";
 import { JSDOM } from 'jsdom';
 import { sortByDate } from '../helper.js';
+import { getOrSaveFileStream } from '../crawlerCache.js';
 
 const baseUri = 'https://www.rhein-neckar-kreis.de';
 const url = `${baseUri}/start/landratsamt/coronavirus+fallzahlen.html`;
@@ -47,9 +48,10 @@ const getSize = node => parseInt(node.children[3].children[0].firstChild.textCon
 const getUrl = node => `${baseUri}${node.children[1].children[0].href}`;
 
 const loadPdf = url => {
-    const promise = new Promise((resolve, reject) => {
+    const promise = new Promise(async (resolve, reject) => {
         const pdfParser = new PDFParser();
-        const pdfPipe = got.stream(url).pipe(pdfParser);
+        const inputStream = await getOrSaveFileStream(url, () => got.stream(url));
+        const pdfPipe = inputStream.pipe(pdfParser);
 
         process.stdout.write('.');
 
