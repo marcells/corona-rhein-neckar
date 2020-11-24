@@ -3,6 +3,10 @@ import fs, { stat } from 'fs';
 import { fileURLToPath } from 'url';
 import moment from 'moment';
 import filenamifyUrl from 'filenamify-url';
+import { lock } from './lock.js';
+
+const cacheLock = lock();
+const fileCacheLock = lock();
 
 const currentDirectory = path.dirname(fileURLToPath(import.meta.url));
 const cacheDirectory = path.join(currentDirectory, '.crawlerCache');
@@ -21,20 +25,24 @@ export const getOrSave = async (key, date, action) => {
     
     createDirectoryIfNotExists(cacheDirectory);
 
-    if (fs.existsSync(fileName)) {
-        console.log(`Read from cache ${fileName} [${await getFileSize(fileName)} bytes]`);
+    return await cacheLock.acquire(
+        fileName,
+        fs.existsSync(fileName),
+        async () => {
+            console.log(`Read from cache ${fileName} [${await getFileSize(fileName)} bytes]`);
 
-        const cachedData = await fs.promises.readFile(fileName);
-
-        return JSON.parse(cachedData);
-    } else {
-        const data = await action();
+            const cachedData = await fs.promises.readFile(fileName);
+    
+            return JSON.parse(cachedData);
+        },
+        async () => {
+            const data = await action();
         
-        await fs.promises.writeFile(fileName, JSON.stringify(data));
-
-        console.log(`Saved in cache ${fileName} [${await getFileSize(fileName)} bytes]`);
-        return data;
-    }
+            await fs.promises.writeFile(fileName, JSON.stringify(data));
+    
+            console.log(`Saved in cache ${fileName} [${await getFileSize(fileName)} bytes]`);
+            return data;
+        });
 }
 
 export const getOrSaveFileStream = async (url, action) => {
@@ -43,17 +51,19 @@ export const getOrSaveFileStream = async (url, action) => {
     
     createDirectoryIfNotExists(fileCacheDirectory);
 
-    if (fs.existsSync(fileName)) {
-        return fs.createReadStream(fileName);
-    } else {
-        const writeStream = fs.createWriteStream(fileName);
-        const inputStream = action();
+    return fileCacheLock.acquire(
+        fileName,
+        fs.existsSync(fileName),
+        () => Promise.resolve(fs.createReadStream(fileName)),
+        () => {
+            const writeStream = fs.createWriteStream(fileName);
+            const inputStream = action();
 
-        inputStream.pipe(writeStream);
-        writeStream.on('finish', async () => console.log(`Saved file in cache ${fileName} [${await getFileSize(fileName)} bytes]`));
-        
-        return inputStream;
-    }
+            inputStream.pipe(writeStream);
+            writeStream.on('finish', async () => console.log(`Saved file in cache ${fileName} [${await getFileSize(fileName)} bytes]`));
+            
+            return Promise.resolve(inputStream);
+        });
 }
 
 const createDirectoryIfNotExists = path => {
