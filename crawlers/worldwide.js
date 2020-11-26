@@ -4,9 +4,8 @@ export const crawlWorldwideData = async () => {
   console.log(`Loading worldwide data...`);
 
   const countriesResponse = await got('https://corona-api.com/countries');
-  const timelineResponse = await got('https://corona-api.com/timeline');
-  
-  const timelineData = JSON.parse(timelineResponse.body).data;
+    
+  const timelineData = await tryGetTimelineData();
   const countriesData = JSON.parse(countriesResponse.body).data;
 
   console.log();
@@ -17,4 +16,14 @@ export const crawlWorldwideData = async () => {
     countries: countriesData,
     timeline: timelineData
   };
+};
+
+const tryGetTimelineData = async () => {
+  try {
+    const timelineResponse = await got('https://corona-api.com/timeline');
+    
+    return JSON.parse(timelineResponse.body).data;
+  } catch {
+    return [];
+  }
 };
