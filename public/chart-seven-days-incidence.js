@@ -6,6 +6,10 @@ registerChart('chart-seven-days-incidence', async chartLink => {
   const sevenDayPer100000 = data.stats.infectionsPerCity.map(x => x.sevenDayPer100000);
   const totalInfections = data.stats.infectionsPerCity.map(x => x.totalInfections);
   const currentInfections = data.stats.infectionsPerCity.map(x => x.currentInfections);
+  const increasedInfectionsSinceYesterday = data.stats.infectionsPerCity.map(x => x.increasedInfectionsSinceYesterday);
+  const totalInfectionsPer100000 = data.stats.infectionsPerCity.map(x => x.totalInfections / x.interest.numberOfHabitants * 100000);
+  const currentInfectionsPer100000 = data.stats.infectionsPerCity.map(x => x.currentInfections / x.interest.numberOfHabitants * 100000);
+  const increasedInfectionsSinceYesterdayPer100000 = data.stats.infectionsPerCity.map(x => x.increasedInfectionsSinceYesterday / x.interest.numberOfHabitants * 100000);
 
   Highcharts.chart('chart-seven-days-incidence', {
       chart: {
@@ -43,8 +47,8 @@ registerChart('chart-seven-days-incidence', async chartLink => {
       },
       plotOptions: {
           column: {
-          pointPadding: 0.2,
-          borderWidth: 0
+            pointPadding: 0.2,
+            borderWidth: 0
           }
       },
       series: [{
@@ -56,6 +60,21 @@ registerChart('chart-seven-days-incidence', async chartLink => {
       }, {
           name: 'Aktuell Infizierte',
           data: currentInfections
-      }]
+      }, {
+        name: 'Neuinfektionen',
+        data: increasedInfectionsSinceYesterday
+    }, {
+        name: 'Gesamte Infektionen pro 100.000 Einwohner',
+        data: totalInfectionsPer100000,
+        visible: false
+    }, {
+        name: 'Aktuell Infizierte pro 100.000 Einwohner',
+        data: currentInfectionsPer100000,
+        visible: false
+    }, {
+        name: 'Neuinfektionen pro 100.000 Einwohner',
+        data: increasedInfectionsSinceYesterdayPer100000,
+        visible: false
+    }]
   });
 });
