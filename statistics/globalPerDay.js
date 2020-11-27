@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { getInfectionsByCity, onlyLastEightDays, sum, avg } from './helper.js';
+import { getInfectionsByCity, onlyLastEightDays, onlyLastNineDays, sum, avg } from './helper.js';
 import { sortByDate } from '../helper.js';
 import interests from '../interests.js';
 
@@ -11,10 +11,13 @@ export const generateGlobalPerDay = (rnkData, airData, worldwideData) => {
     const day = moment(row.date).toDate();
     const rows = array.slice(0, index + 1);
     const rnkDataForEightDays = rows.filter(onlyLastEightDays);
+    const rnkDataForNineDays = rows.filter(onlyLastNineDays);
     const infectionsPerCity = getInfectionsByCity(rnkDataForEightDays);
 
     const sumTotalInfections = sum(infectionsPerCity, x => x.totalInfections);
     const sumCurrentInfections = sum(infectionsPerCity, x => x.currentInfections);
+    const sumIncreasedInfectionsSinceYesterday = sum(infectionsPerCity, x => x.increasedInfectionsSinceYesterday);
+    const rValue = getRValue(rnkDataForNineDays);
     const averageSevenDayPer100000 = getSevenDayIncidence(rnkDataForEightDays);
     const airDataAverage = airDataAverageByDate.hasOwnProperty(day) ? airDataAverageByDate[day] : null;
     const worldwideTotalInfections = worldwideDataByDate.hasOwnProperty(day) ? worldwideDataByDate[day].totalInfections : null;
@@ -24,7 +27,9 @@ export const generateGlobalPerDay = (rnkData, airData, worldwideData) => {
     return {
       date: row.date,
       increasedInfectionsForSevenDays: averageSevenDayPer100000,
+      increasedInfectionsSinceYesterday: sumIncreasedInfectionsSinceYesterday,
       totalInfections: sumTotalInfections,
+      rValue: rValue,
       currentInfections: sumCurrentInfections,
       airDataAverage: airDataAverage,
       worldwideTotalInfections,
@@ -46,6 +51,19 @@ const getSevenDayIncidence = rnkDataForEightDays => {
   const averageSevenDayPer100000 = (end - start) / pop * 100000;
 
   return averageSevenDayPer100000;
+}
+
+const getRValue = rnkDataForNineDays => {
+  if (rnkDataForNineDays.length !== 9) {
+    return null;
+  }
+
+  const newInfectionsForDay = index => sum(rnkDataForNineDays[index].additionalData, x => x.totalInfections) - sum(rnkDataForNineDays[index - 1].additionalData, x => x.totalInfections);
+  
+  const first4Days = newInfectionsForDay(1) + newInfectionsForDay(2) + newInfectionsForDay(3) + newInfectionsForDay(4);
+  const last4Days = newInfectionsForDay(5) + newInfectionsForDay(6) + newInfectionsForDay(7) + newInfectionsForDay(8);
+
+  return last4Days / first4Days;
 }
 
 const getAirDataAverageByDay = airData => {

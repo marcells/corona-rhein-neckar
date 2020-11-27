@@ -11,6 +11,13 @@ registerChart('chart-overview', async chartLink => {
     data: []
   };
 
+  const increasedInfectionsSinceYesterdaySeries = {
+    name: 'Neuinfektionen (RNK)',
+    type: 'column',
+    yAxis: 0,
+    data: []
+  };
+
   const totalInfectionsSeries = {
     name: 'Gesamte Infektionen (RNK)',
     type: 'spline',
@@ -26,6 +33,17 @@ registerChart('chart-overview', async chartLink => {
     tooltip: {
       valueDecimals: 1
     }
+  };
+
+  const rValueSeries = {
+    name: 'R-Wert (RNK)',
+    type: 'spline',
+    yAxis: 6,
+    data: [],
+    tooltip: {
+      valueDecimals: 2
+    },
+    visible: false,
   };
 
   const airSeries = {
@@ -69,8 +87,10 @@ registerChart('chart-overview', async chartLink => {
 
   data.stats.globalPerDay.map(day => {
     currentInfectionsSeries.data.push(day.currentInfections);
+    increasedInfectionsSinceYesterdaySeries.data.push(day.increasedInfectionsSinceYesterday);
     totalInfectionsSeries.data.push(day.totalInfections);
     increasedInfectionsForSevenDaysSeries.data.push(day.increasedInfectionsForSevenDays);
+    rValueSeries.data.push(day.rValue);
     airSeries.data.push(day.airDataAverage);
     worldwideCurrentInfectionSeries.data.push(day.worldwideCurrentInfections);
     worldwideTotalInfectionSeries.data.push(day.worldwideTotalInfections);
@@ -79,8 +99,10 @@ registerChart('chart-overview', async chartLink => {
 
   const series = [
     currentInfectionsSeries,
+    increasedInfectionsSinceYesterdaySeries,
     totalInfectionsSeries,
     increasedInfectionsForSevenDaysSeries,
+    rValueSeries,
     airSeries,
     worldwideCurrentInfectionSeries,
     worldwideTotalInfectionSeries,
@@ -103,7 +125,7 @@ registerChart('chart-overview', async chartLink => {
     },
     yAxis: [{
       title: {
-        text: 'Aktuelle Infektionen',
+        text: 'Aktuelle Infektionen und Neuinfektionen',
         style: {
           color: Highcharts.getOptions().colors[0]
         }
@@ -117,12 +139,12 @@ registerChart('chart-overview', async chartLink => {
       title: {
         text: 'Gesamte Infektionen',
         style: {
-          color: Highcharts.getOptions().colors[1]
+          color: Highcharts.getOptions().colors[2]
         }
       },
       labels: {
         style: {
-          color: Highcharts.getOptions().colors[1]
+          color: Highcharts.getOptions().colors[2]
         }
       },
       opposite: true
@@ -130,14 +152,16 @@ registerChart('chart-overview', async chartLink => {
       title: {
         text: '7-Tage-Inzidenz',
         style: {
-          color: Highcharts.getOptions().colors[2]
+          color: Highcharts.getOptions().colors[3]
         }
       },
       labels: {
         style: {
-          color: Highcharts.getOptions().colors[2]
+          color: Highcharts.getOptions().colors[3]
         }
       },
+    }, {
+      visible: false
     }, {
       visible: false
     }, {
