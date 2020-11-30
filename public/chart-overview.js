@@ -121,7 +121,17 @@ registerChart('chart-overview', async chartLink => {
       text: 'Quelle: rhein-neckar-kreis.de'
     },
     xAxis: {
-      categories: days
+      categories: days,
+      labels: {
+        useHTML: true,
+        formatter: function() {
+            const date = new Date(this.value);
+            const weekday = date.getDay();
+            const weekendColor = weekday === 0 || weekday === 6 ? 'color: #BBB' : '';
+            
+            return `<span style="${weekendColor}">${this.value}</span>`;
+        }
+    }
     },
     yAxis: [{
       title: {
