@@ -33,6 +33,8 @@ export const crawlRnkData = async () => {
   const crawledData = await Promise.all(crawledAvailableData);
   const sortedCrawledData = sortByDate(crawledData, x => x.date);
 
+  autocorrectionOfMissingDays(sortedCrawledData);
+
   console.log();
   console.log('Finished loading.')
   console.log();
@@ -123,3 +125,20 @@ const autocorrectionOfMissingTexts = (rawTextsForPages) => {
     }
   }
 }
+
+const autocorrectionOfMissingDays = (sortedCrawledData) => {
+  for(let index = 1; index < sortedCrawledData.length; index++) {
+    const currentDate = moment(sortedCrawledData[index].date);
+    const previousDate = moment(sortedCrawledData[index - 1].date);
+    const expectedPreviousDate = moment(currentDate).subtract(1, 'day');
+
+    if (!previousDate.isSame(expectedPreviousDate)) {
+      sortedCrawledData.splice(index, 0, {
+        date: expectedPreviousDate,
+        size: 0,
+        url: null,
+        additionalData: sortedCrawledData[index - 1].additionalData.map(x => ({ ...x })),
+      });
+    }
+  }
+};
