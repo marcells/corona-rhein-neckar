@@ -16,5 +16,6 @@ export const crawlAirData = async () => {
     skipEmptyLines: true,
     bom: true,
   })
-  .filter(x => x['Datum']);
+  .filter(x => x['Datum'])
+  .filter(x => x['Messwert'] !== '-');
 };
