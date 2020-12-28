@@ -93,7 +93,7 @@ const loadPdf = url => {
 
 const textFilterForPage = (text, pageIndex, textIndex, numberOfTexts) => {
     if (pageIndex == 0) {
-        const ignoredTexts = [ 'Stand', 'Gemeinde', 'Gesamtzahl', '(%22aktive%20F%C3%A4lle%22)', 'Davon%20in%20Quarant%C3%A4ne%20' ];
+        const ignoredTexts = [ 'Stand', 'Gemeinde', 'Gesamtzahl', '(%22aktive%20F%C3%A4lle%22)', 'Davon%20in%20Quarant%C3%A4ne%20', '"', 'aktive Fälle', '%22', '(', ')', 'aktive%20F%C3%A4lle' ];
 
         return !ignoredTexts.includes(text.R[0].T) && textIndex > 4 && textIndex < numberOfTexts - 2;
     }
