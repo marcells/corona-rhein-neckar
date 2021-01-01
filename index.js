@@ -2,6 +2,8 @@ import express from 'express';
 import { crawlData } from './crawlers/index.js';
 import { reset } from './crawlerCache.js'
 
+process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
+
 const app = express()
 const port = 3000
 
